@@ -21,9 +21,9 @@ int main(void)
 	char str1[256];
 	char str2[256];
 	char str3[256];
-	scanf("%s", &str1);
-	scanf("%s", &str2);
-	scanf("%s", &str3);
+	gets_s(str1);
+	gets_s(str2);
+	gets_s(str3);
 
 	list_element str_list = NULL;
 
@@ -35,7 +35,7 @@ int main(void)
 	str_list_add(&str_list, str3);
 
 
-	str_list_remove(&str_list, data2);
+	str_list_remove(&str_list, str2);
 
 	//str_list_destroy(&str_list);
 

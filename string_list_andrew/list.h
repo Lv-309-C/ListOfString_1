@@ -106,7 +106,8 @@ bool str_list_remove(list_element* head, char_ptr str)
 			list_element temp = next_element(next_element(*head));
 
 			free(next_element(*head));
-			prev_element[1] = (char_ptr)temp;
+			prev_element[1] = (char_ptr)curr;
+			next_element(prev_element)[1] = (char_ptr)temp;
 			*head = prev_element;
 
 			return true;
