@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-// I hate comments, so, enjoy =)
+#define DATA(list) (list[0])
+#define NEXT(head) ((list_element)head[1])
+#define PTR_TO_NEXT(head) (head[1])
 
 typedef char**	list_element;
 typedef char*	char_ptr;
@@ -12,30 +14,26 @@ void str_list_init(list_element* list)
 	*list = (list_element)malloc(2 * sizeof(char_ptr));
 }
 
-list_element next_element(list_element head)
-{
-	return (list_element)head[1];
-}
-
 list_element last_element(list_element head)
 {
 	while (true)
 	{
-		if (head[1] == NULL)
+		if (PTR_TO_NEXT(head) == NULL)
 		{
 			return head;
 		}
-		next_element(head);
+		NEXT(head);
 	}
 }
 
 void str_list_destroy(list_element* list)
 {
-	while (*list != NULL)
+	list_element root = *list;
+	while (root != NULL)
 	{
-		list_element next = next_element(*list);
-		free(*list);
-		*list = next;
+		list_element next = NEXT(root);
+		free(root);
+		root = next;
 	}
 	*list = NULL;
 }
@@ -45,7 +43,7 @@ size_t str_list_size(list_element head)
 	size_t counter;
 	for (counter = 0U; head != NULL; ++counter)
 	{
-		head = next_element(head);
+		head = NEXT(head);
 	}
 	return counter;
 }
@@ -55,20 +53,22 @@ size_t str_list_index_of(list_element list, char_ptr str)
 	size_t counter = 0U;
 	while (list != NULL)
 	{
-		if (!strstr(str, list[0]) == NULL)
-			return counter;
-		++counter;
-		list = next_element(list);
+		if (strstr(str, DATA(list)) != NULL)
+		{
+			++counter;
+		}
+		list = NEXT(list);
 	}
+	return counter;
 }
 
 void str_list_add(list_element* head, char_ptr str)
 {
 	list_element node;
 	str_list_init(&node);
-	node[0] = (char_ptr)malloc(sizeof(char));
-	strcpy(node[0], str);
-	node[1] = NULL;
+	DATA(node) = (char_ptr)malloc(sizeof(char));
+	strcpy(DATA(node), str);
+	PTR_TO_NEXT(node) = NULL;
 
 	if (*head == NULL)
 	{
@@ -77,65 +77,68 @@ void str_list_add(list_element* head, char_ptr str)
 	else
 	{
 		list_element tmp = *head;
-		while (tmp[1] != NULL)
+		while (PTR_TO_NEXT(tmp) != NULL)
 		{
-			tmp = next_element(tmp);
+			tmp = NEXT(tmp);
 		}
-		tmp[1] = (char_ptr)node;
+		PTR_TO_NEXT(tmp) = (char_ptr)node;
 	}
 }
 
 bool str_list_remove(list_element* head, char_ptr str)
 {
-	if (strcmp(*head[0], str) == 0)
-	{
-		list_element temp = next_element(*head);
+	list_element root = *head;
 
-		free(head[0]);
-		*head = temp;
+	if (strcmp(DATA(root), str) == 0)
+	{
+		list_element temp = NEXT(root);
+
+		free(DATA(root));
+		root = temp;
 
 		return true;
 	}
 
 	list_element prev_element = *head;
-	while (*head != NULL)
+	while (root != NULL)
 	{
-		list_element curr = *head;
-		if (strcmp(next_element(*head)[0], str) == 0)
+		list_element curr = root;
+		if (strcmp(DATA(NEXT(root)), str) == 0)
 		{
-			list_element temp = next_element(next_element(*head));
+			list_element temp = NEXT(NEXT(root));
 
-			free(next_element(*head));
-			prev_element[1] = (char_ptr)curr;
-			next_element(prev_element)[1] = (char_ptr)temp;
-			*head = prev_element;
+			free(NEXT(root));
+			PTR_TO_NEXT(prev_element) = (char_ptr)curr;
+			PTR_TO_NEXT(NEXT(prev_element)) = (char_ptr)temp;
+			root = prev_element;
 
 			return true;
 		}
-		*head = next_element(*head);
+		root = NEXT(root);
 	}
 	return false;
 }
 
 void str_list_sort(list_element list)
 {
-	if (list == NULL) {
+	if (list == NULL) 
+	{
 		return;
 	}
 
 	list_element tail = NULL, current, next;
 
-	while (next_element(list) != tail) 
+	while (NEXT(list) != tail)
 	{
 		current = list;
-		while (next_element(current) != tail) 
+		while (NEXT(current) != tail)
 		{
-			next = next_element(current);
-			if (strcmp(current[0], next[0]) >0) 
+			next = NEXT(current);
+			if (strcmp(DATA(current), DATA(next)) < 0)
 			{
-				char_ptr tmp = next[0];
-				next[0] = current[0];
-				current[0] = tmp;
+				char_ptr tmp = DATA(next);
+				DATA(next) = DATA(current);
+				DATA(current) = tmp;
 			}
 			current = next;
 		}
@@ -146,18 +149,25 @@ void str_list_sort(list_element list)
 void str_list_remove_duplicates(list_element list)
 {
 	list_element first_element = list;
-	while (list != NULL)
+	while (list != NULL && PTR_TO_NEXT(list) != NULL)
 	{
-		if (strcmp(list[0], next_element(list)[0]) == 0)
+		if (strcmp(DATA(list), DATA(NEXT(list))) == 0)
 		{
-			list_element temp = next_element(next_element(list));
-
-			free(next_element(list));
-			first_element[1] = (char_ptr)temp;
-			list = first_element;
+			list_element temp = NEXT(NEXT(list));
+			if (temp != NULL)
+			{
+				free(NEXT(list));
+				PTR_TO_NEXT(first_element) = (char_ptr)temp;
+				list = first_element;
+			}
+			else
+			{
+				free(NEXT(list));
+				PTR_TO_NEXT(list) = NULL;
+			}
 		}
 		first_element = list;
-		list = next_element(list);
+		list = NEXT(list);
 	}
 }
 
@@ -166,7 +176,7 @@ void str_list_replace_strings(list_element list, char_ptr before, char_ptr after
 	while (list != NULL)
 	{	if (str_list_index_of(list, before) > 0)
 		{
-			// TODO
+			// TODO: ???
 		}
 	}
 }
