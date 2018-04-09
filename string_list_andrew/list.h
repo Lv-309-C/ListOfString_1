@@ -140,7 +140,7 @@ void str_list_sort(list_element list_ptr)
 			if (strlen(DATA(current)) > strlen(DATA(next)))
 			{
 				char_ptr tmp	=	DATA(next);
-				DATA(next)		=	DATA(current);
+				DATA(next)	=	DATA(current);
 				DATA(current)	=	tmp;
 			}
 			current = next;
