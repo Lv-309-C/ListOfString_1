@@ -16,11 +16,13 @@ void str_list_init(list_element* list_ptr)
 
 void str_list_destroy(list_element* list_ptr)
 {
+	list_element  next_element  =  NULL;
+
 	while (*list_ptr != NULL)
 	{
-		list_element next = NEXT(*list_ptr);
+		next_element = NEXT(*list_ptr);
 		free(*list_ptr);
-		*list_ptr = next;
+		*list_ptr = next_element;
 	}
 	*list_ptr = NULL;
 }
@@ -157,6 +159,7 @@ void str_list_remove_duplicates(list_element list_ptr)
 	{
 		list_element	curr_element	=  list_ptr;
 		list_element	next_element	=  NEXT(list_ptr);
+		
 		if (strcmp(DATA(list_ptr), DATA(next_element)) == 0)
 		{
 			list_element temp = NEXT(next_element);
