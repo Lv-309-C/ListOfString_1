@@ -49,13 +49,13 @@ size_t str_list_index_of(list_element head_ptr, char_ptr str)
 	return counter;
 }
 
-list_element str_element_of(list_element head_ptr, char_ptr str)
+char_ptr str_element_of(list_element head_ptr, char_ptr str)
 {
 	while (head_ptr != NULL)
 	{
 		if (strstr(DATA(head_ptr), str) != NULL)
 		{
-			return head_ptr;
+			return DATA(head_ptr);
 		}
 		head_ptr = NEXT(head_ptr);
 	}
@@ -99,19 +99,19 @@ bool str_list_remove(list_element* head_ptr, char_ptr str)
 	}
 
 	list_element	first_element	=	*head_ptr;
-	list_element	curr_element	=	NULL;
+	list_element	curr_element	=	 NULL;
 
 	while (*head_ptr != NULL && PTR_TO_NEXT(head_ptr) != NULL)
 	{
-		curr_element = *head_ptr;
+		curr_element  =  *head_ptr;
 
 		if (strcmp(DATA(NEXT(*head_ptr)), str) == 0)
 		{
 			list_element temp = NEXT(NEXT(*head_ptr));
 
 			free(NEXT(*head_ptr));
-			PTR_TO_NEXT(curr_element) = (char_ptr)temp;
-			*head_ptr = first_element;
+			PTR_TO_NEXT(curr_element)	=  (char_ptr)temp;
+			*head_ptr					=  first_element;
 
 			return true;
 		}
@@ -127,43 +127,43 @@ void str_list_sort(list_element list_ptr)
 		return;
 	}
 
-	list_element	tail		= NULL;
-	list_element	current		= NULL;
-	list_element	next		= NULL;
+	list_element	last_element	=  NULL;
+	list_element	curr_element	=  NULL;
+	list_element	next_element	=  NULL;
 
-	while (NEXT(list_ptr) != tail)
+	while (NEXT(list_ptr) != last_element)
 	{
-		current = list_ptr;
-		while (NEXT(current) != tail)
+		curr_element = list_ptr;
+		while (NEXT(curr_element) != last_element)
 		{
-			next = NEXT(current);
-			if (strlen(DATA(current)) > strlen(DATA(next)))
+			next_element = NEXT(curr_element);
+			if (strlen(DATA(curr_element)) > strlen(DATA(next_element)))
 			{
-				char_ptr tmp	=	DATA(next);
-				DATA(next)	=	DATA(current);
-				DATA(current)	=	tmp;
+				char_ptr	  tmp	=	DATA(next_element);
+				DATA(next_element)	=	DATA(curr_element);
+				DATA(curr_element)	=	tmp;
 			}
-			current = next;
+			curr_element = next_element;
 		}
-		tail = current;
+		last_element = curr_element;
 	}
 }
 
 void str_list_remove_duplicates(list_element list_ptr)
 {
-	list_element	first_element	= list_ptr;
+	list_element  first_element  =  list_ptr;
 
 	while (list_ptr != NULL && PTR_TO_NEXT(list_ptr) != NULL)
 	{
-		list_element	curr_element	= list_ptr;
-		list_element	next_element	= NEXT(list_ptr);
+		list_element	curr_element	=  list_ptr;
+		list_element	next_element	=  NEXT(list_ptr);
 		if (strcmp(DATA(list_ptr), DATA(next_element)) == 0)
 		{
 			list_element temp = NEXT(next_element);
 			
 			free(next_element);
-			PTR_TO_NEXT(curr_element) = (char_ptr)temp;
-			list_ptr = first_element;
+			PTR_TO_NEXT(curr_element)	=  (char_ptr)temp;
+			list_ptr					=  first_element;
 		}
 		else if (strcmp(DATA(curr_element), DATA(next_element)) != 0)
 		{
@@ -174,21 +174,19 @@ void str_list_remove_duplicates(list_element list_ptr)
 
 void str_list_replace_strings(list_element list_ptr, char_ptr before, char_ptr after)
 {
-	list_element	_before		= NULL;
-	list_element	_after		= NULL;
+	char_ptr  _before  =  str_element_of(list_ptr, before);
+
+	if (_before == NULL || after == NULL)
+	{
+		return;
+	}
 
 	while (list_ptr != NULL)
 	{
-		_before		=	str_element_of(list_ptr, before);
-		_after		=	str_element_of(list_ptr, after);
-
-		if (_before != NULL && _after != NULL)
+		if (strcmp(DATA(list_ptr), _before) == 0)
 		{
-			char_ptr tmp	=	DATA(_before);
-			DATA(_before)	=	DATA(_after);
-			DATA(_after)	=	tmp;
+			DATA(list_ptr) = after;
 		}
 		list_ptr = NEXT(list_ptr);
 	}
-
 }
