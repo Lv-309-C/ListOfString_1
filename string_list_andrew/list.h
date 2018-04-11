@@ -16,8 +16,12 @@ void str_list_init(list_element* list_ptr)
 
 void str_list_destroy(list_element* list_ptr)
 {
-	list_element  next_element  =  NULL;
+	if (*list_ptr == NULL)
+	{
+		return;
+	}
 
+	list_element  next_element  =  NULL;
 	while (*list_ptr != NULL)
 	{
 		next_element = NEXT(*list_ptr);
@@ -66,11 +70,15 @@ char_ptr str_element_of(list_element head_ptr, char_ptr str)
 
 void str_list_add(list_element* head_ptr, char_ptr str)
 {
-	list_element node = NULL;
+	if (str == NULL || strlen(str) <= 3)
+	{
+		return;
+	}
 
+	list_element node = NULL;
 	str_list_init(&node);
-	DATA(node) = (char_ptr)malloc(strlen(str));
-	strcpy(DATA(node), str);
+	DATA(node) = (char_ptr)malloc(strlen(str) + 1);
+	strcpy(DATA(node), str); //-V575
 	PTR_TO_NEXT(node) = NULL;
 
 	if (*head_ptr == NULL)
@@ -90,6 +98,11 @@ void str_list_add(list_element* head_ptr, char_ptr str)
 
 bool str_list_remove(list_element* head_ptr, char_ptr str)
 {
+	if (str == NULL || strcmp(str, "") == 0 || *head_ptr == NULL)
+	{
+		return false;
+	}
+
 	if (strcmp(DATA(*head_ptr), str) == 0)
 	{
 		list_element temp = NEXT(*head_ptr);
@@ -153,13 +166,17 @@ void str_list_sort(list_element list_ptr)
 
 void str_list_remove_duplicates(list_element list_ptr)
 {
+	if (list_ptr == NULL)
+	{
+		return;
+	}
+
 	list_element  first_element  =  list_ptr;
 
 	while (list_ptr != NULL && PTR_TO_NEXT(list_ptr) != NULL)
 	{
 		list_element	curr_element	=  list_ptr;
 		list_element	next_element	=  NEXT(list_ptr);
-		
 		if (strcmp(DATA(list_ptr), DATA(next_element)) == 0)
 		{
 			list_element temp = NEXT(next_element);
@@ -179,7 +196,7 @@ void str_list_replace_strings(list_element list_ptr, char_ptr before, char_ptr a
 {
 	char_ptr  _before  =  str_element_of(list_ptr, before);
 
-	if (_before == NULL || after == NULL)
+	if (list_ptr == NULL || _before == NULL || after == NULL || strcmp(after, "") == 0)
 	{
 		return;
 	}
