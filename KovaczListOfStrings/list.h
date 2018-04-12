@@ -34,7 +34,7 @@ void StringListDestroy(list_element* list_ptr)
 size_t StringListSize(list_element head_ptr)
 {
 	size_t counter = 0U;
-	for (; head_ptr != NULL; ++counter)
+	for ( ; head_ptr != NULL; ++counter)
 	{
 		head_ptr = NEXT(head_ptr);
 	}
@@ -152,9 +152,9 @@ void StringListSort(list_element list_ptr)
 			next_element = NEXT(curr_element);
 			if (strlen(DATA(curr_element)) > strlen(DATA(next_element)))
 			{
-				char_ptr tmp		=	DATA(next_element);
+				char_ptr temp		=	DATA(next_element);
 				DATA(next_element)	=	DATA(curr_element);
-				DATA(curr_element)	=	tmp;
+				DATA(curr_element)	=	temp;
 			}
 			curr_element = next_element;
 		}
