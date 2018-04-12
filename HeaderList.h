@@ -10,6 +10,9 @@ void StringListInit(char*** list)
 
 void StringListAdd(char***list, char* str)
 {
+	if(str == NULL)
+		return;
+	
 	char** temp_node;
 
 	StringListInit(&temp_node);
@@ -42,6 +45,9 @@ void StringListDestroy(char*** list)
 
 void StringListRemove(char*** list, char* str)
 {
+	if(str == NULL)
+		return;
+	
 	bool find = false;
 	char** needed_node = *list;
 
@@ -87,6 +93,9 @@ int StringListSize(char** list)
 
 int StringListIndexOf(char** list, char* str)
 {
+	if (str == NULL)
+		return 0;
+	
 	int counter = 0, index = 0;
 
 	while (list != NULL)
@@ -138,8 +147,8 @@ void StringListRemoveDuplicates(char*** list)
 
 void StringListReplace(char*** list, char* before, char* after)
 {
-	/*if (*list == NULL)
-		return;*/
+	if (*list == NULL)
+		return;
 
 	char** temp_list = *list;
 	int index = StringListIndexOf(*list, before); // find index of before string
