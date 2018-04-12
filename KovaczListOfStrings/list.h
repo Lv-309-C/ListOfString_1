@@ -44,7 +44,7 @@ size_t StringListSize(list_element head_ptr)
 size_t StringListIndexOf(list_element head_ptr, char_ptr str)
 {
 	size_t counter = 0U;
-	for (; head_ptr != NULL; head_ptr = NEXT(head_ptr), ++counter)
+	for ( ; head_ptr != NULL; head_ptr = NEXT(head_ptr), ++counter)
 	{
 		if (strcmp(DATA(head_ptr), str) == 0)
 		{
@@ -56,7 +56,7 @@ size_t StringListIndexOf(list_element head_ptr, char_ptr str)
 
 char_ptr StringListElementOf(list_element head_ptr, char_ptr str)
 {
-	for (; head_ptr != NULL; head_ptr = NEXT(head_ptr))
+	for ( ; head_ptr != NULL; head_ptr = NEXT(head_ptr))
 	{
 		if (strcmp(DATA(head_ptr), str) == 0)
 		{
@@ -125,7 +125,7 @@ bool StringListRemove(list_element* head_ptr, char_ptr str)
 
 			free(NEXT(*head_ptr));
 			PTR_TO_NEXT(curr_element)	=  (char_ptr)temp;
-			*head_ptr					=  first_element;
+			*head_ptr			=  first_element;
 
 			return true;
 		}
@@ -152,7 +152,7 @@ void StringListSort(list_element list_ptr)
 			next_element = NEXT(curr_element);
 			if (strlen(DATA(curr_element)) > strlen(DATA(next_element)))
 			{
-				char_ptr	  tmp	=	DATA(next_element);
+				char_ptr tmp		=	DATA(next_element);
 				DATA(next_element)	=	DATA(curr_element);
 				DATA(curr_element)	=	tmp;
 			}
@@ -170,7 +170,6 @@ void StringListRemoveDuplicates(list_element list_ptr)
 	}
 
 	list_element  first_element  =  list_ptr;
-
 	while (list_ptr != NULL && PTR_TO_NEXT(list_ptr) != NULL)
 	{
 		list_element	curr_element	=  list_ptr;
@@ -181,7 +180,7 @@ void StringListRemoveDuplicates(list_element list_ptr)
 			
 			free(next_element);
 			PTR_TO_NEXT(curr_element)	=  (char_ptr)temp;
-			list_ptr					=  first_element;
+			list_ptr			=  first_element;
 		}
 		else if (strcmp(DATA(curr_element), DATA(next_element)) != 0)
 		{
@@ -194,7 +193,7 @@ bool StringListReplaceInStrings(list_element* list_ptr, char_ptr before, char_pt
 {
 	char_ptr _before = StringListElementOf(*list_ptr, before);
 
-	if (list_ptr == NULL || _before == NULL || after == NULL || strcmp(after, "") == 0)
+	if (list_ptr == NULL || _before == NULL || *after == '\0')
 	{
 		return false;
 	}
