@@ -23,19 +23,20 @@ int main(void)
 {
 	list_element str_list = NULL;
 
-	char str1[256];
-	char str2[256];
-	char str3[256];
-	gets(str1);
-	gets(str2);
-	gets(str3);
-
-	str_list_add(&str_list, str1);
-	str_list_add(&str_list, str3);
-	str_list_add(&str_list, str2);
-	str_list_add(&str_list, str1);
-	str_list_add(&str_list, str3);
-	str_list_add(&str_list, str3);
+	char data1[256];
+	char data2[256];
+	char data3[256];
+	gets(data1);
+	gets(data2);
+	gets(data3);
+	
+	StringListAdd(&str_list, data1);
+	StringListAdd(&str_list, data3);
+	StringListAdd(&str_list, data2);
+	StringListAdd(&str_list, data3);
+	StringListAdd(&str_list, data1);
+	StringListAdd(&str_list, data3);
+	StringListAdd(&str_list, data2);
 
 #ifdef DEBUG
 	StringListPrint(str_list);
