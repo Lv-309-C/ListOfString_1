@@ -72,7 +72,7 @@ ListElement GetLastElementOfList(ListElement head)
 }
 bool RemoveStringFromList(ListElement head, String str)
 {
-	// in progres
+	// function in progres
 }
 int GetNumberOfElements(ListElement head)
 {
