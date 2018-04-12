@@ -2,10 +2,8 @@
 //
 
 #include "stdafx.h"
-
 #include <cstdlib>
 #include <string.h>
-
 #include <iostream>
 using namespace std;
 
@@ -29,7 +27,7 @@ int main() {
 
 	char str1[] = "This is 1.";
 	char str2[] = "I'm the second line. \n";
-	char str3[] = "Fuck this shit I'm out! \n";
+	char str3[] = "I'm out! \n";
 	char str4[] = "I'm fourth \n";
 
 	StringListAdd(&list, str1);
@@ -50,7 +48,7 @@ int main() {
 	//cout << "REMOVED " << StringListRemove(list, str1) << endl;
 	//cout << "REMOVED " << StringListRemove(list, str3) << endl;
 
-	StringListReplaceStrings(list, "I'm fourth \n", "4 \n*");
+	StringListReplaceStrings(list, "I'm fourth", "4");
 	cout << "CHANGED " << "I'm fourth -> 4" << endl;
 
 	//StringListReplaceInStrings(list, "This", "qwer");
@@ -99,7 +97,7 @@ void StringListAdd(char*** list, char* str)
 	char** node;
 	StringListInit(&node);
 
-	if (str == "" || str == NULL)
+	if (str == NULL)
 	{
 		node[1] = (char*)malloc(strlen("default string") * sizeof(char));
 		node[1] = "default string";
@@ -135,7 +133,7 @@ void PRINT(char** list)
 
 	for (int i(0); list != NULL; i++)
 	{
-		cout << list[1];
+		cout << list[1] << endl;
 		list = (char**)list[0];
 	}
 }
@@ -165,7 +163,7 @@ int StringListIndexOf(char** list, char* str)
 
 	for (int i(0); list != NULL; i++)
 	{
-		if (!strcmp(str, list[1]))
+		if (strcmp(str, list[1]) == NULL)
 		{
 			index = i;
 			break;
@@ -184,7 +182,7 @@ int StringListIndexOf(char** list, char* str)
 int StringListRemove(char** list, char* str)
 {
 	// remove first element of the list
-	if (!strcmp(str, list[1]))
+	if (strcmp(str, list[1]) == NULL)
 	{
 		char** new_head = (char**)list[0];
 		free(list[0]);
@@ -201,7 +199,7 @@ int StringListRemove(char** list, char* str)
 	for (int i(0); list[0] != NULL; i++)
 	{
 		char** cur = list;
-		if (!strcmp(str, list[1]))
+		if (strcmp(str, list[1]) == NULL)
 		{
 			char** next = (char**)list[0];
 			free(list[0]);
@@ -219,12 +217,12 @@ int StringListRemove(char** list, char* str)
 
 bool StringListReplaceStrings(char** list, char* before, char* after)
 {
-	if (!strcmp(before, after) || (before == NULL) || (after == NULL) || (list == NULL))
+	if (strcmp(before, after) == NULL || (before == NULL) || (after == NULL) || (list == NULL))
 		return 1;
 
 	for (int i(0); list != NULL; i++, list = (char**)list[0])
 	{
-		if (!strcmp(before, list[1]))
+		if (strcmp(before, list[1]) == NULL)
 		{
 			list[1] = after;
 		}
@@ -235,7 +233,7 @@ bool StringListReplaceStrings(char** list, char* before, char* after)
 
 bool StringListReplaceInStrings(char** list, char* before, char* after)
 {
-	if (!strcmp(before, after) || (before == NULL) || (after == NULL) || (list == NULL))
+	if (strcmp(before, after) == NULL || (before == NULL) || (after == NULL) || (list == NULL))
 		return 1;
 
 	bool before_found = 0;
