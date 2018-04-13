@@ -15,7 +15,10 @@ enum NameOfFields
 
 ListElement InitElementOfList();
 void AddStringToList(ListElement*, String);
-bool RemoveStringFromList(ListElement, String);
+void RemoveElement(ListElement*, ListElement);
+bool RemoveStringFromList(ListElement*, String);
+void RemoveDublicates(ListElement*);
+ListElement GetElementWithString(ListElement, String);
 ListElement GetLastElementOfList(ListElement);
 void PrintList(ListElement);
 int GetNumberOfElements(ListElement);
@@ -70,9 +73,68 @@ ListElement GetLastElementOfList(ListElement head)
 		element = (ListElement)element[Next];
 	return element;
 }
-bool RemoveStringFromList(ListElement head, String str)
+void RemoveElement(ListElement* head, ListElement delete_element)
 {
-	// function in progres
+	if (*head == nullptr)
+		return;
+	if (delete_element == nullptr)
+		return;
+	if (*head == delete_element) {	// at begin of list
+		*head = (ListElement)delete_element[Next];
+		if (*head != nullptr)
+			(*head)[Prev] = nullptr;
+		delete_element[Next] = nullptr;
+	}
+	else if ((ListElement)delete_element[Next] == nullptr) { //at the end of list
+		((ListElement)delete_element[Prev])[Next] = nullptr;
+		delete_element[Prev] = nullptr;
+	}
+	else { // in other cases
+		((ListElement)delete_element[Prev])[Next] = delete_element[Next];
+		((ListElement)delete_element[Next])[Prev] = delete_element[Prev];
+		delete_element[Next] = nullptr;
+		delete_element[Prev] = nullptr;
+	}
+	free(delete_element[Data]);
+	free(delete_element);
+	return;
+}
+bool RemoveStringFromList(ListElement* head, String str)
+{
+	if (*head == nullptr)
+		return false;
+	ListElement delete_element = GetElementWithString(*head, str);
+	if (delete_element == nullptr)
+		return false;
+	RemoveElement(head, delete_element);
+	return true;
+}
+void RemoveDublicates(ListElement* head)
+{
+	ListElement list = *head;
+	ListElement element, next;
+	while (list != nullptr) {
+		element = (ListElement)list[Next];
+		while (element != nullptr) {
+			next = (ListElement)element[Next];
+			if (_strcmpi(list[Data], element[Data]) == 0)
+				RemoveElement(head, element);
+			element = next;
+		}
+		list = (ListElement)list[Next];
+	}
+	return;
+}
+ListElement GetElementWithString(ListElement head, String str)
+{
+	if (str == NULL)
+		return nullptr;
+	while (head != nullptr) {
+		if (_strcmpi(head[Data], str) == 0)
+			return head;
+		head = (ListElement)head[Next];
+	}
+	return nullptr;
 }
 int GetNumberOfElements(ListElement head)
 {
@@ -95,10 +157,21 @@ int GetIndexOfString(ListElement head, String str)
 	}
 	return index;
 }
+
+
+
+
 void PrintList(ListElement element)
 {
 	if (element == nullptr)
 		return;
 	std::cout << element[Data] << std::endl;
 	PrintList((ListElement)element[Next]);
+}
+void PrintListReverse(ListElement element)
+{
+	if (element == nullptr)
+		return;
+	PrintListReverse((ListElement)element[Next]);
+	std::cout << element[Data] << std::endl;
 }
