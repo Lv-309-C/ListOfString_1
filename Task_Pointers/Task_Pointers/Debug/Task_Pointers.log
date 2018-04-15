@@ -1,0 +1,5 @@
+﻿  SourceList.cpp
+d:\softserve projects\task_pointers\task_pointers\headerlist.h(105): warning C4018: '<': signed/unsigned mismatch
+d:\softserve projects\task_pointers\task_pointers\headerlist.h(108): warning C4018: '<': signed/unsigned mismatch
+  Task_Pointers.vcxproj -> D:\Softserve projects\Task_Pointers\Debug\Task_Pointers.exe
+  Task_Pointers.vcxproj -> D:\Softserve projects\Task_Pointers\Debug\Task_Pointers.pdb (Partial PDB)
