@@ -2,30 +2,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-void StringListInit(char*** list) {
-	
+void StringListInit(char*** list)
+ {
 	list = nullptr;
 	list = (char***)malloc(2 * sizeof(char**));
 	list[0] = nullptr;
 }
 
-bool IsEmpty(char*** list) {
-	
+bool IsEmpty(char*** list)
+ {
 	if ((list == nullptr) || (*list == nullptr))
 		return true;
 
 	return false;
 }
 
-size_t StringListSize(char*** list) {
-
+size_t StringListSize(char*** list)
+{
 	if (IsEmpty(list))
 		return 0;
 
 	size_t i = 0;
 	char** next = *(list);
 
-	while (next != nullptr) 
+	while (next != nullptr)
 	{
 		++i;
 		next = *(list + i);
@@ -33,8 +33,8 @@ size_t StringListSize(char*** list) {
 	return i;
 }
 
-void StringListDestroy(char*** list) {
-	
+void StringListDestroy(char*** list)
+{
 	if (IsEmpty(list))
 		return;
 
@@ -42,30 +42,30 @@ void StringListDestroy(char*** list) {
 	char** p = nullptr;
 
 	while (*list != nullptr)
-	{	
+	{
 		p = *(list + i);
 		free(*list);
 		*list = p;
-		++i;			
+		++i;
 	}
 	*list = nullptr;
 }
 
-void StringListAdd(char*** list, const char* str) {
-
+void StringListAdd(char*** list, const char* str)
+{
 	if (list == nullptr)
-		return; 
+		return;
 
 	if (str == nullptr)
 		return;
 
 	char** elem = nullptr;
 	elem = (char**)malloc(1 * sizeof(char*));
-	elem[0] = (char*)malloc(strlen(str) * sizeof(char));	
+	elem[0] = (char*)malloc(strlen(str) * sizeof(char));
 
 	strcpy(elem[0], str);
 
-	if (*list == nullptr) 
+	if (*list == nullptr)
 	{
 		list[0] = elem;
 		list[1] = nullptr;
@@ -78,8 +78,8 @@ void StringListAdd(char*** list, const char* str) {
 	list[index + 1] = nullptr;
 }
 
-size_t StringListIndexOf(char*** list, char* str) {
-	
+size_t StringListIndexOf(char*** list, char* str)
+{
 	if (IsEmpty(list))
 		return 0;
 
@@ -97,8 +97,8 @@ size_t StringListIndexOf(char*** list, char* str) {
 	return SIZE;
 }
 
-void StringListSort(char*** list) {
-
+void StringListSort(char*** list)
+{
 	if (IsEmpty(list))
 		return;
 
@@ -110,7 +110,7 @@ void StringListSort(char*** list) {
 
 	while (index != 0) {
 
-		while ((j != index) && (next != nullptr)) 
+		while ((j != index) && (next != nullptr))
 		{
 			if (strcmp(current[0], next[0]) > 0)
 			{
@@ -132,8 +132,8 @@ void StringListSort(char*** list) {
 	}
 }
 
-bool StringListRemove(char*** list, char* str) {
-	
+bool StringListRemove(char*** list, char* str)
+{
 	if (IsEmpty(list))
 		return false;
 
@@ -143,7 +143,7 @@ bool StringListRemove(char*** list, char* str) {
 
 	while (current)
 	{
-		if (strcmp(current[0], str) == 0) 
+		if (strcmp(current[0], str) == 0)
 		{
 			free(list[i]);
 			while (next) {
@@ -164,8 +164,8 @@ bool StringListRemove(char*** list, char* str) {
 	return false;
 }
 
-void StringListRemoveDuplicates(char*** list) {
-	
+void StringListRemoveDuplicates(char*** list)
+{
 	if (IsEmpty(list))
 		return;
 
@@ -184,9 +184,9 @@ void StringListRemoveDuplicates(char*** list) {
 	{
 		if (!str_second)
 		{
-			
+
 			++index_first;
-			
+
 			index_second = index_first + 1;
 			str_first = *(list + index_first);
 			str_second = *(list + index_second);
@@ -197,30 +197,30 @@ void StringListRemoveDuplicates(char*** list) {
 				return;
 		}
 
-		if (strcmp(str_first[0], str_second[0]) == 0) 
+		if (strcmp(str_first[0], str_second[0]) == 0)
 		{
-			
+
 			free(list[index_second]);
 			index_of_deleted_word = index_second;
-			
+
 			while (after_second) {
 
 				list[index_second] = after_second;
 				++index_second;
 				after_second = *(list + index_second + 1);
-				
+
 			}
 			list[index_second] = nullptr;
 			deleted = true;
-		}	
-		
-		if (deleted) 
+		}
+
+		if (deleted)
 		{
-			index_second = index_of_deleted_word;			
+			index_second = index_of_deleted_word;
 			str_second = *(list + index_second);
 			after_second = *(list + index_second + 1);
 			deleted = false;
-			
+
 		} else {
 				++index_second;
 				str_second = *(list + index_second);
@@ -229,8 +229,8 @@ void StringListRemoveDuplicates(char*** list) {
 	}
 }
 
-void StringListReplaceInStrings(char*** list, char* before, char* after) {
-	
+void StringListReplaceInStrings(char*** list, char* before, char* after)
+{
 	if (IsEmpty(list))
 		return;
 
@@ -238,13 +238,13 @@ void StringListReplaceInStrings(char*** list, char* before, char* after) {
 		return;
 
 	size_t i = 0;
-	char** str_current = *(list);	
-	
+	char** str_current = *(list);
+
 	while (str_current)
 	{
-		if (strcmp(str_current[0], before) == 0) 
+		if (strcmp(str_current[0], before) == 0)
 		{
-			
+
 			size_t index = StringListIndexOf(list, before);
 
 			*list[index] = after;
@@ -252,4 +252,31 @@ void StringListReplaceInStrings(char*** list, char* before, char* after) {
 		++i;
 		str_current = *(list + i);
 	}
+}
+
+void QuikSortList(char*** list, int left, int right)
+ {
+
+	int i = left, j = right;
+	char** middle = nullptr;
+
+	middle = list[(i + j) / 2];
+
+	do {
+		while (strcmp(*middle, *list[i]) > 0) i++;
+		while (strcmp(*middle, *list[j]) < 0) j--;
+
+		if (i <= j)
+		{
+			char** tmp = list[i];
+			list[i] = list[j];
+			list[j] = tmp;
+			i++;
+			j--;
+		}
+
+	} while (i < j);
+
+	if (i < right) QuikSortList(list, i, right);
+	if (j > left) QuikSortList(list, left, j);
 }
