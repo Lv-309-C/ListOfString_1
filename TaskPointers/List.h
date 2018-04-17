@@ -7,7 +7,7 @@ typedef char** ListElement;
 typedef char* ListField;
 typedef char* String;
 
-enum NameOfFields
+enum NamesOfFields
 {
 	Prev,
 	Data,
@@ -29,10 +29,10 @@ int GetIndexOfString(ListElement, String);
 
 void ReplaceStringsInList(ListElement, String, String);
 
-void SortList(ListElement, int(*f)(const void* str1, const void* str2));
-int Partition(char**, int, int, int(*f)(const void* str1, const void* str2));
-void StringQuickSort(char**, int, int, int(*f)(const void* str1, const void* str2));
-void SwapStrings(String*, String*);
+void SortList(ListElement, int(*f)(const void* arg1, const void* arg2));
+int Partition(String*, int, int, int(*f)(const void* arg1, const void* arg2));
+void QuickSort(String*, int, int, int(*f)(const void* arg1, const void* arg2));
+void Swap(void**, void**);
 
 void PrintList(ListElement);
 
@@ -63,7 +63,7 @@ void AddStringToList(ListElement* head, String str)
 		return;
 
 	ListElement new_element = InitElementOfList();
-	new_element[Data] = (char*)malloc(strlen(str) + 1);
+	new_element[Data] = (String)malloc(strlen(str) + 1);
 	strcpy(new_element[Data], str);
 
 	if (*head == nullptr) {
@@ -211,7 +211,7 @@ int GetStringArray(ListElement head, char*** array)
 	}
 	return k;
 }
-void PushStringsInList(ListElement head, char ***array, int k)
+void PushStringsInList(ListElement head, char*** array, int k)
 {
 	if (head == nullptr || array == nullptr || *array == nullptr)
 		return;
@@ -223,47 +223,47 @@ void PushStringsInList(ListElement head, char ***array, int k)
 	*array = nullptr;
 	return;
 }
-int SizeComparator(void const* str1, void const* str2)
+int SizeComparator(void const* arg1, void const* arg2)
 {
-	return strlen((String)str1) - strlen((String)str2);
+	return strlen((String)arg1) - strlen((String)arg2);
 }
-int AlphabetComparator(void const* str1, void const* str2)
+int AlphabetComparator(void const* arg1, void const* arg2)
 {
-	return _strcmpi((String)str1, (String)str2);
+	return _strcmpi((String)arg1, (String)arg2);
 }
-void SortList(ListElement head, int(*Comparator)(const void* str1, const void* str2))
+void SortList(ListElement head, int(*Comparator)(const void* arg1, const void* arg2))
 {
 	if (head == nullptr)
 		return;
-	char** array_of_string = nullptr;
+	String* array_of_string = nullptr;
 	int k = GetStringArray(head, &array_of_string);
-	StringQuickSort(array_of_string, 0, k - 1, Comparator);
+	QuickSort(array_of_string, 0, k - 1, Comparator);
 	PushStringsInList(head, &array_of_string, k);
 	return;
 }
-void StringQuickSort(char** arr, int p, int q, int(*Comparator)(const void* str1, const void* str2))
+void QuickSort(String* arr, int p, int q, int(*Comparator)(const void* arg1, const void* arg2))
 {
 	if (p >= q) return;
 	int x = Partition(arr, p, q, Comparator);
-	StringQuickSort(arr, p, x - 1, Comparator);
-	StringQuickSort(arr, x + 1, q, Comparator);
+	QuickSort(arr, p, x - 1, Comparator);
+	QuickSort(arr, x + 1, q, Comparator);
 }
 
-int Partition(char** arr, int p, int q, int(*Comparator)(const void* str1, const void* str2))
+int Partition(String* arr, int p, int q, int(*Comparator)(const void* arg1, const void* arg2))
 {
-	String pivot_string = arr[q];
+	String pivot = arr[q];
 	int i = p;
 	for (int j = p; j < q; j++)
-		if (Comparator(arr[j], pivot_string) < 0)
-			SwapStrings(&arr[i++], &arr[j]);
-	SwapStrings(&arr[i], &arr[q]);
+		if (Comparator(arr[j], pivot) < 0)
+			Swap((void**)&arr[i++], (void**)&arr[j]);
+	Swap((void**)&arr[i], (void**)&arr[q]);
 	return i;
 }
-void SwapStrings(String* str1, String* str2)
+void Swap(void** arg1, void** arg2)
 {
-	String temp = *str1;
-	*str1 = *str2;
-	*str2 = temp;
+	void* temp = (String)*arg1;
+	*arg1 = *arg2;
+	*arg2 = temp;
 	return;
 }
 

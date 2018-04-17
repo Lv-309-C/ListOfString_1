@@ -6,20 +6,15 @@ using namespace std;
 int main()
 {
 	ListElement list = nullptr;
-	//AddStringToList(&list, "Andriy");
-	//AddStringToList(&list, "Orest");
-	//AddStringToList(&list, "SOLID");
-	//AddStringToList(&list, "Orest is looking at the window");
-	//AddStringToList(&list, "Hello world");
-	//AddStringToList(&list, "Orest");
-	//AddStringToList(&list, "Orest");
-	AddStringToList(&list, "AB");
-	AddStringToList(&list, "B");
-	AddStringToList(&list, "CAC");
-	AddStringToList(&list, "BC");
-	AddStringToList(&list, "DAAA");
-	AddStringToList(&list, "CAB");
-	AddStringToList(&list, "BC");
+	AddStringToList(&list, "Andriy");
+	AddStringToList(&list, "Orest");
+	AddStringToList(&list, "SOLID");
+	AddStringToList(&list, "OOD");
+	AddStringToList(&list, "Unit Test Task");
+	AddStringToList(&list, "Orest is looking at the window");
+	AddStringToList(&list, "Hello world");
+	AddStringToList(&list, "Andriy");
+	AddStringToList(&list, "Orest");
 
 
 	PrintList(list);
