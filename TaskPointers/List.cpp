@@ -13,13 +13,13 @@ int main()
 	//AddStringToList(&list, "Hello world");
 	//AddStringToList(&list, "Orest");
 	//AddStringToList(&list, "Orest");
-	AddStringToList(&list, "ABCD");
-	AddStringToList(&list, "BBCC");
-	AddStringToList(&list, "CACD");
-	AddStringToList(&list, "BCAD");
+	AddStringToList(&list, "AB");
+	AddStringToList(&list, "B");
+	AddStringToList(&list, "CAC");
+	AddStringToList(&list, "BC");
 	AddStringToList(&list, "DAAA");
-	AddStringToList(&list, "CABD");
-	AddStringToList(&list, "BCDA");
+	AddStringToList(&list, "CAB");
+	AddStringToList(&list, "BC");
 
 
 	PrintList(list);
@@ -34,6 +34,10 @@ int main()
 	cout << "***" << endl;
 	
 	SortList(list, AlphabetComparator);
+	PrintList(list);
+	cout << "***" << endl;
+
+	SortList(list, SizeComparator);
 	PrintList(list);
 	DestroyList(&list);
 

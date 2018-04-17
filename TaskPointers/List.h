@@ -44,7 +44,7 @@ ListElement InitElementOfList()
 }
 void DestroyList(ListElement* head)
 {
-	if (*head == nullptr)
+	if (head == nullptr || *head == nullptr)
 		return;
 	do {
 		*head = (ListElement)(*head)[Next];
@@ -59,7 +59,7 @@ void DestroyList(ListElement* head)
 }
 void AddStringToList(ListElement* head, String str)
 {
-	if (str == nullptr)
+	if (str == nullptr || head == nullptr)
 		return;
 
 	ListElement new_element = InitElementOfList();
@@ -80,14 +80,14 @@ ListElement GetLastElementOfList(ListElement head)
 {
 	if (head == nullptr)
 		return nullptr;
-	ListElement element = head;
-	while ((ListElement)element[Next] != nullptr)
-		element = (ListElement)element[Next];
-	return element;
+
+	while ((ListElement)head[Next] != nullptr)
+		head = (ListElement)head[Next];
+	return head;
 }
 void RemoveElement(ListElement* head, ListElement delete_element)
 {
-	if (*head == nullptr)
+	if (head == nullptr || *head == nullptr)
 		return;
 	if (delete_element == nullptr)
 		return;
@@ -113,7 +113,7 @@ void RemoveElement(ListElement* head, ListElement delete_element)
 }
 bool RemoveStringFromList(ListElement* head, String str)
 {
-	if (*head == nullptr)
+	if (head == nullptr || *head == nullptr)
 		return false;
 	ListElement delete_element = GetElementWithString(*head, str);
 	if (delete_element == nullptr)
@@ -123,6 +123,8 @@ bool RemoveStringFromList(ListElement* head, String str)
 }
 void RemoveDublicates(ListElement* head)
 {
+	if (head == nullptr)
+		return;
 	ListElement list = *head;
 	ListElement element, next;
 	while (list != nullptr) {
@@ -160,6 +162,8 @@ int GetNumberOfElements(ListElement head)
 int GetIndexOfString(ListElement head, String str)
 {
 	int index = -1;
+	if (*str == '\0')
+		return index;
 	ListElement element = head;
 	while (element != nullptr) {
 		index++;
@@ -207,6 +211,18 @@ int GetStringArray(ListElement head, char*** array)
 	}
 	return k;
 }
+void PushStringsInList(ListElement head, char ***array, int k)
+{
+	if (head == nullptr || array == nullptr || *array == nullptr)
+		return;
+	for (int i = 0; i < k; i++) {
+		head[Data] = (*array)[i];
+		head = (ListElement)head[Next];
+	}
+	free(*array);
+	*array = nullptr;
+	return;
+}
 int SizeComparator(void const* str1, void const* str2)
 {
 	return strlen((String)str1) - strlen((String)str2);
@@ -217,13 +233,12 @@ int AlphabetComparator(void const* str1, void const* str2)
 }
 void SortList(ListElement head, int(*Comparator)(const void* str1, const void* str2))
 {
+	if (head == nullptr)
+		return;
 	char** array_of_string = nullptr;
 	int k = GetStringArray(head, &array_of_string);
 	StringQuickSort(array_of_string, 0, k - 1, Comparator);
-	for (int i = 0; i < k; i++) {
-		head[Data] = array_of_string[i];
-		head = (ListElement)head[Next];
-	}
+	PushStringsInList(head, &array_of_string, k);
 	return;
 }
 void StringQuickSort(char** arr, int p, int q, int(*Comparator)(const void* str1, const void* str2))
@@ -236,14 +251,11 @@ void StringQuickSort(char** arr, int p, int q, int(*Comparator)(const void* str1
 
 int Partition(char** arr, int p, int q, int(*Comparator)(const void* str1, const void* str2))
 {
-	char* pivot_string = arr[q];
+	String pivot_string = arr[q];
 	int i = p;
-
 	for (int j = p; j < q; j++)
-		if ((*Comparator)(arr[i], arr[j]) > 0) {
-			SwapStrings(&arr[i], &arr[j]);
-			i++;
-		}
+		if (Comparator(arr[j], pivot_string) < 0)
+			SwapStrings(&arr[i++], &arr[j]);
 	SwapStrings(&arr[i], &arr[q]);
 	return i;
 }
