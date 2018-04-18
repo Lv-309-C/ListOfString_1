@@ -1,5 +1,0 @@
-﻿  ListTest.cpp
-d:\softserve projects\task_pointers\task_pointers\headerlist.h(105): warning C4018: '<': signed/unsigned mismatch
-d:\softserve projects\task_pointers\task_pointers\headerlist.h(108): warning C4018: '<': signed/unsigned mismatch
-  DynamicListTest.vcxproj -> D:\Softserve projects\Task_Pointers\Debug\DynamicListTest.dll
-  DynamicListTest.vcxproj -> D:\Softserve projects\Task_Pointers\Debug\DynamicListTest.pdb (Partial PDB)

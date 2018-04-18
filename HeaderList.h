@@ -5,14 +5,17 @@
 void StringListInit(char*** list)
 {
 	*list = NULL;
-	*list = (char**)malloc(2 * sizeof(char*)); // allocte memory for 2 pointers
+	*list = (char**)malloc(2 * sizeof(char*)); // allocate memory for 2 pointers
+
+	if (!(*list)) // if memory allocation wasn't happened
+		return;
 }
 
 void StringListAdd(char***list, char* str)
 {
-	if(str == NULL)
+	if (str == NULL)
 		return;
-	
+
 	char** temp_node;
 
 	StringListInit(&temp_node);
@@ -45,9 +48,9 @@ void StringListDestroy(char*** list)
 
 void StringListRemove(char*** list, char* str)
 {
-	if(str == NULL)
+	if (str == NULL)
 		return;
-	
+
 	bool find = false;
 	char** needed_node = *list;
 
@@ -61,7 +64,7 @@ void StringListRemove(char*** list, char* str)
 	{
 		char** temp_list = *list;
 
-		if (temp_list[0] == str) // if needed node is the fisrst node in our list
+		if (temp_list[0] == str) // if needed node is the first node in our list
 		{
 			*list = (char**)temp_list[1];
 			free(temp_list);
@@ -71,7 +74,7 @@ void StringListRemove(char*** list, char* str)
 			while ((char**)temp_list[1] != needed_node) // search node that situated before needed node
 				temp_list = (char**)temp_list[1];
 
-			temp_list[1] = needed_node[1]; // conect list
+			temp_list[1] = needed_node[1]; // connect list
 			free(needed_node);
 		}
 	}
@@ -95,7 +98,7 @@ int StringListIndexOf(char** list, char* str)
 {
 	if (str == NULL)
 		return 0;
-	
+
 	int counter = 0, index = 0;
 
 	while (list != NULL)
@@ -147,7 +150,7 @@ void StringListRemoveDuplicates(char*** list)
 
 void StringListReplace(char*** list, char* before, char* after)
 {
-	if (*list == NULL)
+	if (*list == NULL || before == NULL || after == NULL)
 		return;
 
 	char** temp_list = *list;
@@ -162,8 +165,11 @@ void StringListReplace(char*** list, char* before, char* after)
 	}
 }
 
-void StringListSort(char*** list)
+void StringListBubbleSort(char*** list)
 {
+	if (*list == NULL)
+		return;
+
 	for (int i(0); i < StringListSize(*list) - 1; i++)
 	{
 		char** first_list = *list;
@@ -187,3 +193,56 @@ void StringListSort(char*** list)
 	}
 }
 
+char*** GetArrayOfStrings(char** list)
+{
+	if (list == NULL)
+		return NULL;
+
+	int size = StringListSize(list);
+
+	char*** array = (char***)malloc(size * sizeof(char**));
+
+	for (int i(0); i < size; i++)
+	{
+		array[i] = list;
+		list = (char**)list[1];
+	}
+
+	return array;
+}
+
+void QuickSort(char*** array_of_strings, int start, int end)
+{
+	int i = start;
+	int j = end;
+	char* middle = *(array_of_strings[(i + j) / 2]);
+
+	do
+	{
+		while (strcmp(middle, *(array_of_strings[i])) > 0) i++;
+		while (strcmp(*(array_of_strings[j]), middle) > 0) j--;
+
+		if (i <= j)
+		{
+			char* temp = *(array_of_strings[i]);
+			*(array_of_strings[i]) = *(array_of_strings[j]);
+			*(array_of_strings[j]) = temp;
+
+			i++;
+			j--;
+		}
+	} while (i < j);
+
+	if (i < end) QuickSort(array_of_strings, i, end);
+	if (j > start) QuickSort(array_of_strings, start, j);
+}
+
+void StringListQuickSort(char** list)
+{
+	char*** array_of_strings = GetArrayOfStrings(list);
+
+	if (array_of_strings == NULL)
+		return;
+
+	QuickSort(array_of_strings, 0, StringListSize(list) - 1);
+}
