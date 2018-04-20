@@ -59,23 +59,20 @@ void StringListAdd(char*** list, const char* str)
 	if (str == nullptr)
 		return;
 
-	char** elem = nullptr;
-	elem = (char**)malloc(1 * sizeof(char*));
-	elem[0] = (char*)malloc(strlen(str) * sizeof(char));
+    size_t size = StringListSize(list);
 
-	strcpy(elem[0], str);
+  	if (size == 0)
+  	{
+  		*list[0] = (char*)malloc(strlen(str) * sizeof(char));
+  		strcpy(*list[0], str);
+  		list[1] = nullptr;
+  		return;
+  	}
 
-	if (*list == nullptr)
-	{
-		list[0] = elem;
-		list[1] = nullptr;
-		return;
-	}
-
-	size_t index = StringListSize(list);
-
-	list[index] = elem;
-	list[index + 1] = nullptr;
+  	list[size] = (char**)malloc(1 * sizeof(char*));
+  	*list[size] = (char*)malloc(strlen(str) * sizeof(char));
+  	strcpy(*list[size], str);
+  	list[size+1] = nullptr;
 }
 
 size_t StringListIndexOf(char*** list, char* str)
