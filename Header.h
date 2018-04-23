@@ -8,12 +8,6 @@ using namespace std;
 
 void StringListInit(char*** list)
 {
-	//if (*list != NULL)
-	//{
-	//	if ((*list)[1] != NULL) free((*list)[1]);
-	//	free(*list);
-	//}
-
 	*list = (char**)malloc(2 * sizeof(char*));
 }
 
